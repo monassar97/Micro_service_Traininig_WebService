@@ -1,7 +1,5 @@
-package com.training.model;
+package com.training.rest;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-	@NotEmpty
-	private String id;
+public class UserDTO {
 	private String name;
-	@Min(20)
 	private int age;
+	
 }

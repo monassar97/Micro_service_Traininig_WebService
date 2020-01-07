@@ -1,9 +1,9 @@
-package com.training.session2;
+package com.training.rest;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,16 +12,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.training.model.User;
-import com.training.repository.UserManagment;
+import com.training.model.UserAggregator;
+import com.training.repository.UserRepository;
 
 @RestController
 @RequestMapping("/index")
 public class GreetingController {
-	private UserManagment userManagment;
+	private UserAggregator userAggregator;
 
-	public GreetingController(UserManagment userManagment) {
+	public GreetingController(UserAggregator userAggregator) {
 		super();
-		this.userManagment = userManagment;
+		this.userAggregator = userAggregator;
 	}
 
 	@GetMapping("/hi")
@@ -31,29 +32,32 @@ public class GreetingController {
 
 	@GetMapping("/{userId}")
 	public User greetingById(@PathVariable("userId") String id) {
-		return userManagment.getuserById(id).orElseThrow(RuntimeException::new);
+		return userAggregator.loadUser(id).orElseThrow(RuntimeException::new);
 	}
 
 	@GetMapping("/getAll")
 	public List<User> getAllUsers() {
-		return userManagment.getAll();
+		return userAggregator.loadAllUser();
 	}
 
 	@RequestMapping(value = "/addUser", method = { RequestMethod.POST })
-	public ResponseEntity<String> addUser(@RequestBody User user) {
-		userManagment.adduser(user);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-
+	public User addUser(@Valid @RequestBody User user) {
+		userAggregator.registerUser(user);
+		return user;
 	}
 
 	@RequestMapping(value = "/deletUser/{id}", method = { RequestMethod.DELETE })
-	public void deleteUser(@PathVariable("id") String id) {
-		userManagment.deleteuserById(id);
+	public User deleteUser(@PathVariable("id") String id) {
+		User user = userAggregator.loadUser(id).get();
+		userAggregator.loadUser(id);
+		return user;
 	}
 
 	@RequestMapping(value = "/updateUser", method = { RequestMethod.PUT })
-	public void updateUser(@RequestBody User user) {
-		userManagment.adduser(user);
+	public boolean updateUser(@RequestBody User user) {
+		if(userAggregator.update(user))
+			return true;
+		return false;
 	}
 
 }

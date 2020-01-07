@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.training.model.User;
 
-public interface UserManagment {
+public interface UserRepository {
 	public void adduser(User user);
 
 	public Optional<User> getuserById(String id);
@@ -13,4 +13,5 @@ public interface UserManagment {
 	public void deleteuserById(String id);
 
 	public List<User> getAll();
+	public boolean updateUser(User user);
 }

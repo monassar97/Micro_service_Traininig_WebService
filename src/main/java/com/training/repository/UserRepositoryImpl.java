@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 
 import com.training.model.User;
 
-@Configuration
-public class UserMangmentImpl implements UserManagment {
+@Component
+public class UserRepositoryImpl implements UserRepository {
 
-	Map<String, User> users = new HashMap() {
+	Map<String, User> users = new HashMap<String, User>() {
 		{
-			put("1", new User("1", "ahmad"));
+			put("1", new User("1", "ahmad", 20));
 		}
 	};
 
@@ -46,4 +46,13 @@ public class UserMangmentImpl implements UserManagment {
 		return allusers;
 	}
 
+	@Override
+	public boolean updateUser(User user) {
+		if (!users.containsKey(user.getId())) {
+			return false;
+		} else {
+			users.put(user.getId(), user);
+			return true;
+		}
+	}
 }
