@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import com.training.model.User;
 
 @Component
+@ConditionalOnProperty(prefix = "com.aspire.traiing.in-memory",name = "enabled",matchIfMissing = false)
 public class UserRepositoryImpl implements UserRepository {
 
 	Map<String, User> users = new HashMap<String, User>() {

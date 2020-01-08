@@ -5,13 +5,14 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
+import com.training.repository.UserRepository;
 import com.training.repository.UserRepositoryImpl;
 
 @Component
 public class UserAggregator {
-	private final UserRepositoryImpl userRepository;
+	private final UserRepository userRepository;
 
-	public UserAggregator(UserRepositoryImpl userRepository) {
+	public UserAggregator(UserRepository userRepository) {
 		super();
 		this.userRepository = userRepository;
 	}
